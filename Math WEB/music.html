@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎵 Predicting Music Taste with Vectors</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #fdfbfb, #ebedee);
+      margin: 0;
+      padding: 20px;
+      color: #333;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .dark-mode {
+      background: #1e1e1e;
+      color: #e0e0e0;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 30px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      transition: background 0.3s;
+    }
+
+    .dark-mode .container {
+      background: #2c2c2c;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    p, li {
+      font-size: 1.2em;
+      line-height: 1.7;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    input[type="number"] {
+      padding: 8px;
+      margin-bottom: 10px;
+      width: 100%;
+      max-width: 300px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px 15px;
+      margin-top: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .dark-mode button {
+      background-color: #4d90fe;
+    }
+
+    .toggle-dark {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+    }
+
+    .result {
+      font-size: 1.3em;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <button class="toggle-dark" onclick="toggleDarkMode()">🌓 Toggle Dark Mode</button>
+  <div class="container">
+    <h1>🎵 Predicting Music Taste with Vectors</h1>
+
+    <p><strong>Question:</strong> Is music taste predictable using math?</p>
+
+    <p>
+      Music is very diverse, from different tempos to energy to valence. Considering these dimensions as vectors (i, j, k) in 3D, we can represent music as mathematical vectors.
+    </p>
+
+    <p>
+      By assigning a score out of 1 for each dimension, we can obtain coordinates for both songs and personal preferences. The dimensions used here are:
+    </p>
+    <ul>
+      <li><strong>Energy</strong> – Is it a calm song or a very energetic one?</li>
+      <li><strong>Valence</strong> – Does the song sound happy/cheerful or sad/tense?</li>
+      <li><strong>Tempo</strong> – Is it fast-paced or slow?</li>
+    </ul>
+
+    <p>
+      We represent a person's taste as a vector. For example: [0.9, 0.8, 0.7]. Then, we compare it to a new song vector using:
+    </p>
+
+    <pre>
+cos(θ) = (a · b) / (|a||b|)
+    </pre>
+
+    <p>
+      If cos(θ) is close to 1, the vectors are similar and the person will likely enjoy the song.
+    </p>
+
+    <h2>🔢 Try It Yourself!</h2>
+    <div>
+      <h3>Your Music Taste Vector</h3>
+      <label for="energy1">Energy (0–1):</label>
+      <input type="number" id="energy1" step="0.01" min="0" max="1" />
+      <label for="valence1">Valence (0–1):</label>
+      <input type="number" id="valence1" step="0.01" min="0" max="1" />
+      <label for="tempo1">Tempo (0–1):</label>
+      <input type="number" id="tempo1" step="0.01" min="0" max="1" />
+    </div>
+
+    <div>
+      <h3>Song Vector</h3>
+      <label for="energy2">Energy (0–1):</label>
+      <input type="number" id="energy2" step="0.01" min="0" max="1" />
+      <label for="valence2">Valence (0–1):</label>
+      <input type="number" id="valence2" step="0.01" min="0" max="1" />
+      <label for="tempo2">Tempo (0–1):</label>
+      <input type="number" id="tempo2" step="0.01" min="0" max="1" />
+    </div>
+
+    <button onclick="calculateSimilarity()">Calculate Similarity</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function calculateSimilarity() {
+      const a = [
+        parseFloat(document.getElementById("energy1").value),
+        parseFloat(document.getElementById("valence1").value),
+        parseFloat(document.getElementById("tempo1").value),
+      ];
+
+      const b = [
+        parseFloat(document.getElementById("energy2").value),
+        parseFloat(document.getElementById("valence2").value),
+        parseFloat(document.getElementById("tempo2").value),
+      ];
+
+      if (a.includes(NaN) || b.includes(NaN)) {
+        document.getElementById("result").innerText = "Please enter valid values.";
+        return;
+      }
+
+      const dot = a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+      const magA = Math.sqrt(a[0] ** 2 + a[1] ** 2 + a[2] ** 2);
+      const magB = Math.sqrt(b[0] ** 2 + b[1] ** 2 + b[2] ** 2);
+      const cosTheta = dot / (magA * magB);
+
+      const message = cosTheta >= 0.85
+        ? "✅ This song matches your taste very well!"
+        : cosTheta >= 0.6
+        ? "👍 You might like this song."
+        : "❌ This song probably isn't your vibe.";
+
+      document.getElementById("result").innerText = `Cos(θ) ≈ ${cosTheta.toFixed(3)} — ${message}`;
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+    }
+  </script>
+</body>
+</html>
