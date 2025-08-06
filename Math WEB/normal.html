@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Normal Distribution</title>
+
+  <!-- MathJax for LaTeX rendering -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+
+  <style>
+    :root {
+      --bg-light: linear-gradient(to right, #fdfbfb, #ebedee);
+      --bg-dark: #1e1e1e;
+      --text-light: #333;
+      --text-dark: #f0f0f0;
+      --container-light: white;
+      --container-dark: #2a2a2a;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-light);
+      color: var(--text-light);
+      margin: 0;
+      padding: 0;
+      transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    .dark-mode {
+      background: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 60px auto;
+      background-color: var(--container-light);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.4s ease;
+    }
+
+    .dark-mode .container {
+      background-color: var(--container-dark);
+      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.05);
+    }
+
+    h1, h2, p, label {
+      transition: color 0.4s ease;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.2em;
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .toggle-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #444;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      z-index: 999;
+    }
+
+    .input-section {
+      margin-top: 40px;
+    }
+
+    input[type="number"] {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      width: 100px;
+    }
+
+    button.predict-btn {
+      padding: 10px 20px;
+      margin-left: 10px;
+      background-color: #1a73e8;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    img.distribution-image {
+      width: 100%;
+      max-width: 800px;
+      margin: 30px 0;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+  <button class="toggle-btn" onclick="toggleMode()">Toggle Mode</button>
+  <div class="container">
+    <h1>📊 Normal Distribution</h1>
+    <p>The normal distribution is one of the most important concepts in statistics. It describes how values of a variable are distributed. Most data in the real world — from heights to test scores — tends to follow this bell-shaped curve when measured at scale.</p>
+    <p>It is defined by its mean (average) and standard deviation (spread). As more and more data points are collected, the data often starts resembling a normal distribution due to the Central Limit Theorem.</p>
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Standard_deviation_diagram.svg/1200px-Standard_deviation_diagram.svg.png" 
+         alt="Normal Distribution Graph"
+         class="distribution-image"
+         style="background: white; padding: 10px;"/>
+
+   <h2>🔍 Why is it important?</h2>
+<ul>
+  <li>Helps us calculate probabilities of events.</li>
+  <li>Used in standardizing tests like IGCSE, A-levels, SATs, etc.</li>
+  <li>Forms the foundation for confidence intervals and hypothesis testing.</li>
+  <li>Used in quality control, finance, insurance, machine learning, and more.</li>
+</ul>
+
+<p>In practice:</p>
+<ul>
+  <li><strong>Education:</strong> Exam scores from large populations (like IGCSE, A-levels) often follow a normal distribution, helping universities and exam boards set grade boundaries and percentiles.</li>
+  <li><strong>Finance & Insurance:</strong> Stock returns, market risks, and claims data are often modeled using the normal distribution to calculate likelihoods and optimize decisions.</li>
+  <li><strong>Manufacturing:</strong> Used in quality control — e.g., if product weights deviate too much from the mean, they are flagged as defective.</li>
+  <li><strong>Medical Science:</strong> Patient statistics like blood pressure, cholesterol, and even reaction times tend to follow normal patterns, guiding diagnosis and treatment thresholds.</li>
+  <li><strong>Artificial Intelligence:</strong> Many machine learning algorithms assume data is normally distributed for better model performance and feature scaling.</li>
+</ul>
+
+
+    <h2>🎯 Interactive: Compare Your Score</h2>
+    <p>Enter your score below to see where you fall in a simulated normal distribution of test scores (mean = 70, standard deviation = 10). It will show what percentage of students you performed better than!</p>
+
+    <div class="input-section">
+      <label for="score">Your Score:</label>
+      <input type="number" id="score" placeholder="e.g. 82">
+      <button class="predict-btn" onclick="calculatePercentile()">Compare</button>
+      <div class="result" id="result"></div>
+    </div>
+  </div>
+
+  <script>
+    function toggleMode() {
+      document.body.classList.toggle("dark-mode");
+    }
+
+    function calculatePercentile() {
+      const score = parseFloat(document.getElementById("score").value);
+      const mean = 70;
+      const std = 10;
+
+      if (isNaN(score)) {
+        document.getElementById("result").innerText = "Please enter a valid number.";
+        return;
+      }
+
+      const z = (score - mean) / std;
+      const percentile = Math.round(normCDF(z) * 100);
+      document.getElementById("result").innerText = `You performed better than ${percentile}% of students.`;
+    }
+
+    function normCDF(z) {
+      return 0.5 * (1 + erf(z / Math.sqrt(2)));
+    }
+
+    function erf(x) {
+      const sign = x >= 0 ? 1 : -1;
+      x = Math.abs(x);
+      const a1 =  0.254829592;
+      const a2 = -0.284496736;
+      const a3 =  1.421413741;
+      const a4 = -1.453152027;
+      const a5 =  1.061405429;
+      const p  =  0.3275911;
+      const t = 1 / (1 + p * x);
+      const y = 1 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
+      return sign * y;
+    }
+  </script>
+</body>
+</html>
