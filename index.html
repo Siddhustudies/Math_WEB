@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Siddhu's Math Playground</title>
+  <style>
+    :root {
+      --bg-color: #fdfbfb;
+      --text-color: #333;
+      --card-bg: #f2f7ff;
+      --hover-bg: #dfe9f3;
+    }
+
+    body.dark {
+      --bg-color: #1a1a1a;
+      --text-color: #f0f0f0;
+      --card-bg: #2c2c2c;
+      --hover-bg: #3a3a3a;
+    }
+
+    * {
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 60px auto;
+      background-color: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      background-color: var(--bg-color);
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1.2em;
+      line-height: 1.8;
+    }
+
+    h2 {
+      font-size: 1.8em;
+      margin-top: 40px;
+    }
+
+    .project-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .project-card {
+      background-color: var(--card-bg);
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.07);
+      transition: all 0.3s ease;
+    }
+
+    .project-card:hover {
+      background-color: var(--hover-bg);
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .project-card a {
+      text-decoration: none;
+      color: #1a73e8;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    .project-card a:hover {
+      text-decoration: underline;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 60px;
+      color: #777;
+    }
+
+    .toggle-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #1a73e8;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 0.9em;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .toggle-btn:hover {
+      background: #1558b0;
+    }
+
+    @media (max-width: 600px) {
+      .project-list {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <button class="toggle-btn" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+  <div class="container">
+    <h1>🧠 Siddhu's Math Playground</h1>
+    <p>
+      This page exists for one reason: <strong>because I’m curious.</strong><br><br>
+      I don’t care if the ideas here are original, useful, or even right.<br><br>
+      I just want to explore math because it’s <strong>fun, weird,</strong> and sometimes <strong>beautiful.</strong>
+    </p>
+
+    <h2>📚 Projects</h2>
+    <div class="project-list">
+      <div class="project-card">
+        <a href="music.html">🎵 Predicting Music Taste with Vectors</a>
+        <p>Using math and cosine similarity to guess if you’ll vibe with a song.</p>
+      </div>
+      <div class="project-card">
+        <a href="Fibonacci.html">🌻 The Fibonacci Sequence & Nature</a>
+        <p>Why spirals show up in flowers, shells, and even hurricanes.</p>
+      </div>
+      <div class="project-card">
+        <a href="normal.html">📊 The Normal Distribution</a>
+        <p>Dive into one of the most essential patterns in nature and data science.</p>
+      </div>
+    </div>
+
+    <div class="footer">
+      🚧 More experiments coming soon!
+    </div>
+  </div>
+
+  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark");
+    }
+  </script>
+</body>
+</html>
